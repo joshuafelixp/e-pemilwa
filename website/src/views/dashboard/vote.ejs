@@ -1,0 +1,23 @@
+<%- include('../components/alert') %>
+
+<div class="wrapper">
+  <%- include('../components/dashboard_nav') %>
+  <section class="main">
+    <div class="container-fluid ps-4 pt-2">
+      <div class="d-flex" id="title">
+        <h4><i class="bi bi-check2-circle me-2"></i>Pemilihan</h4>
+      </div>
+    </div>
+    <div class="container">
+      <div class="main-content text-center">
+        <h4 style="font-weight: 400;">Sebelum melakukan pemilihan, silahkan cek hak pilih apakah
+          sudah digunakan atau belum pada status memilih
+          <a href="/account" style="color:#0B3C84;text-decoration: underline;">halaman akun
+          </a>.
+        </h4>
+        <h2 class="mt-4" style="font-weight: 500;">Siap untuk memilih?</h2>
+        <a href="/voting"><button type="button" class="btn mt-1 btn-vote">Mulai Memilih</button></a>
+      </div>
+    </div>
+  </section>
+</div>

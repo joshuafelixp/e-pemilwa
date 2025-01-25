@@ -1,0 +1,66 @@
+OrdererOrgs:
+
+  - Name: filkom-orderer
+    Domain: filkom-orderer.pemilwa.com
+    EnableNodeOUs: true
+
+    Specs:
+      - Hostname: orderer0
+        SANS:
+          - localhost
+
+  - Name: fh-orderer
+    Domain: fh-orderer.pemilwa.com
+    EnableNodeOUs: true
+
+    Specs:
+      - Hostname: orderer0
+        SANS:
+          - localhost
+
+  - Name: feb-orderer
+    Domain: feb-orderer.pemilwa.com
+    EnableNodeOUs: true
+
+    Specs:
+      - Hostname: orderer0
+        SANS:
+          - localhost
+
+PeerOrgs:
+
+  - Name: filkom
+    Domain: filkom.pemilwa.com
+    EnableNodeOUs: true
+    
+    Template:
+      Count: 2
+      SANS:
+        - localhost
+
+    Users:
+      Count: 1
+
+  - Name: fh
+    Domain: fh.pemilwa.com
+    EnableNodeOUs: true
+    
+    Template:
+      Count: 2
+      SANS:
+        - localhost
+
+    Users:
+      Count: 1
+
+  - Name: feb
+    Domain: feb.pemilwa.com
+    EnableNodeOUs: true
+    
+    Template:
+      Count: 2
+      SANS:
+        - localhost
+
+    Users:
+      Count: 1

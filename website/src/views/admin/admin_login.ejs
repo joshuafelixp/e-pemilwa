@@ -1,0 +1,31 @@
+<%- include('../components/alert') %>
+
+<section class="main">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-sm-7 col-md-6 m-auto">
+        <div class="card border-0 shadow">
+          <div class="card-body text-center">
+            <h3 id="title" style="font-weight: 700;">Login Admin</h3>
+            <P>Masuk menggunakan username dan password!</P>
+            <form action="/admin/login" method="post">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="input_username" name="username" placeholder="username" autocomplete="off" required>
+                <label for="input_username">Username</label>
+              </div>
+              <div class="form-floating">
+                <input type="password" class="form-control" id="input_password" name="password" placeholder="Password" autocomplete="off" required>
+                <label for="input_password">Password</label>
+              </div>
+              <button class="btn btn-login my-4" type="submit">Login</button>
+            </form>
+            <p class="mb-0">Apakah Anda Mahasiswa?
+              <a href="/login" class=" text-50 fw-bold" style="color:#0B3C84;">Klik di sini
+              </a>
+              untuk masuk.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

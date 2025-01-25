@@ -1,0 +1,20 @@
+[
+    {
+        "candidateNumber": 1,
+        "presidentName": "Joshua Felix",
+        "vpresidentName": "Anthony Aaron",
+        "candidateImage": "1.png"
+    },
+    {
+        "candidateNumber": 2,
+        "presidentName": "Rayhan Adhika",
+        "vpresidentName": "Nur Wahyu",
+        "candidateImage": "2.png"
+    },
+    {
+        "candidateNumber": 3,
+        "presidentName": "Resnu Wahyu",
+        "vpresidentName": "Muh Fadli",
+        "candidateImage": "3.png"
+    }
+]

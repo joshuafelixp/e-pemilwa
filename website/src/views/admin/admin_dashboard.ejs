@@ -1,0 +1,75 @@
+<%- include('../components/alert') %>
+
+<div class="wrapper">
+  <%- include('../components/admin_nav') %>
+  <section class="main">
+    <div class="container-fluid ps-4 pt-2">
+      <div class="d-flex" id="title">
+        <h4><i class="bi bi-grid-1x2 me-2"></i>Dashboard Admin</h4>
+      </div>
+    </div>
+    <div class="container-fluid ps-4">
+      <div class="row g-0 mt-4 ">
+        <div class="col-sm-6 col-md-3 d-flex">
+          <div class="card-info d-flex me-4 mb-4">
+            <div class="card-image d-flex align-items-center justify-content-center" style="background: #3E6EE7;">
+              <i class="bi bi-envelope-fill"></i>
+            </div>
+            <div class="card-text">
+              <p class="card-text-text">SUARA MASUK</p>
+              <p class="card-text-text"><%= dashboard.voteCount %></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3 d-flex">
+          <div class="card-info d-flex me-4 mb-4">
+            <div class="card-image d-flex align-items-center justify-content-center" style="background: #0A97BB;">
+              <i class="bi bi-person-vcard-fill"></i>
+            </div>
+            <div class="card-text">
+              <p class="card-text-text">PEMILIH</p>
+              <p class="card-text-text"><%= dashboard.voterCount %></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3 d-flex">
+          <div class="card-info d-flex me-4 mb-4">
+            <div class="card-image d-flex align-items-center justify-content-center" style="background: #CCCCCC;">
+              <i class="bi bi-people-fill"></i>
+            </div>
+            <div class="card-text">
+              <p class="card-text-text">KANDIDAT</p>
+              <p class="card-text-text"><%= dashboard.candidateCount %></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3 d-flex">
+          <div class="card-info d-flex me-4 mb-4">
+            <div class="card-image d-flex align-items-center justify-content-center" style="background: #EA4643;">
+              <i class="bi bi-person-circle"></i>
+            </div>
+            <div class="card-text">
+              <p class="card-text-text">ADMIN</p>
+              <p class="card-text-text"><%= dashboard.adminCount %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid ps-4 pb-2">
+      <div class="row g-0 text-center">
+        <% dashboard.candidatesData.forEach(candidate=> { %>
+        <div class="col-md-6 col-sm-12 d-flex">
+          <div class="candidate-layout me-4 mb-4">
+            <h5 class="mt-2 mb-3">
+              <%= candidate.candidateNumber %>
+            </h5>
+            <img src="/images/candidates/<%= candidate.candidateImage%>" alt="candidateImage" class="candidate-image">
+            <h5 class="mt-3"><%= candidate.presidentName %> & <%= candidate.vpresidentName %></h5>
+            <h6 class="mb-3">Perolehan Suara: <%= candidate.totalVotes%></h6>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+  </section>
+</div>

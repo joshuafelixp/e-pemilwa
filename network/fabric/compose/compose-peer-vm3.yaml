@@ -1,0 +1,189 @@
+version: '3.7'
+
+volumes:
+  orderer0.feb-orderer.pemilwa.com:
+  peer0.feb.pemilwa.com:
+  peer1.feb.pemilwa.com:
+
+networks:
+  pemilwa:
+    external: true
+    name: fabric-pemilwa
+
+services:
+
+  orderer0-feb:
+    image: hyperledger/fabric-orderer:2.5.10
+    labels:
+      service: hyperledger-fabric
+    hostname: orderer0.feb-orderer.pemilwa.com
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=9050
+      - ORDERER_GENERAL_LOCALMSPID=feb-ordererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_GENERAL_BOOTSTRAPMETHOD=none
+      - ORDERER_CHANNELPARTICIPATION_ENABLED=true
+      - ORDERER_ADMIN_TLS_ENABLED=true
+      - ORDERER_ADMIN_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_ADMIN_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_ADMIN_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_ADMIN_TLS_CLIENTROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_ADMIN_LISTENADDRESS=0.0.0.0:9053
+      - ORDERER_OPERATIONS_LISTENADDRESS=orderer0.feb-orderer.pemilwa.com:11443
+      - ORDERER_METRICS_PROVIDER=prometheus
+    working_dir: /root
+    command: orderer
+    volumes:
+        - /home/ubuntu/network/fabric/organizations/ordererOrganizations/feb-orderer.pemilwa.com/orderers/orderer0.feb-orderer.pemilwa.com/msp:/var/hyperledger/orderer/msp
+        - /home/ubuntu/network/fabric/organizations/ordererOrganizations/feb-orderer.pemilwa.com/orderers/orderer0.feb-orderer.pemilwa.com/tls/:/var/hyperledger/orderer/tls
+        - orderer0.feb-orderer.pemilwa.com:/var/hyperledger/production/orderer
+    deploy:
+        mode: replicated
+        replicas: 1
+        restart_policy:
+          condition: on-failure
+        placement:
+          constraints:
+            - node.hostname == vm3
+    ports:
+      - 9050:9050
+      - 9053:9053
+      - 11443:11443
+    networks:
+      pemilwa:
+        aliases:
+          - orderer0.feb-orderer.pemilwa.com
+
+  peer0-feb:
+    image: hyperledger/fabric-peer:2.5.10
+    labels:
+      service: hyperledger-fabric
+    hostname: peer0.feb.pemilwa.com
+    environment:
+      #Generic peer variables
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=fabric-pemilwa
+      - FABRIC_CFG_PATH=/etc/hyperledger/peercfg
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variables
+      - CORE_PEER_ID=peer0.feb.pemilwa.com
+      - CORE_PEER_ADDRESS=peer0.feb.pemilwa.com:9051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:9051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.feb.pemilwa.com:9052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:9052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.feb.pemilwa.com:9051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.feb.pemilwa.com:9051
+      - CORE_PEER_LOCALMSPID=febMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_OPERATIONS_LISTENADDRESS=peer0.feb.pemilwa.com:11444
+      - CORE_METRICS_PROVIDER=prometheus
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer0feb"}
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+      #CouchDB
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0feb:5984
+      # The CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME and CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
+      # provide the credentials for ledger to connect to CouchDB.  The username and password must
+      # match the username and password set for the associated CouchDB.
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
+    working_dir: /root
+    command: peer node start
+    volumes:
+      - /home/ubuntu/network/fabric/organizations/peerOrganizations/feb.pemilwa.com/peers/peer0.feb.pemilwa.com:/etc/hyperledger/fabric
+      - peer0.feb.pemilwa.com:/var/hyperledger/production
+      - /home/ubuntu/network/fabric/config:/etc/hyperledger/peercfg
+      - ${DOCKER_SOCK}:/host/var/run/docker.sock
+    deploy:
+        mode: replicated
+        replicas: 1
+        restart_policy:
+          condition: on-failure
+        placement:
+          constraints:
+            - node.hostname == vm3
+    ports:
+      - 9051:9051
+      - 11444:11444
+    networks:
+      pemilwa:
+        aliases:
+          - peer0.feb.pemilwa.com
+
+  peer1-feb:
+    image: hyperledger/fabric-peer:2.5.10
+    labels:
+      service: hyperledger-fabric
+    hostname: peer1.feb.pemilwa.com
+    environment:
+      #Generic peer variables
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=fabric-pemilwa
+      - FABRIC_CFG_PATH=/etc/hyperledger/peercfg
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variables
+      - CORE_PEER_ID=peer1.feb.pemilwa.com
+      - CORE_PEER_ADDRESS=peer1.feb.pemilwa.com:12051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:12051
+      - CORE_PEER_CHAINCODEADDRESS=peer1.feb.pemilwa.com:12052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:12052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.feb.pemilwa.com:12051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.feb.pemilwa.com:12051
+      - CORE_PEER_LOCALMSPID=febMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_OPERATIONS_LISTENADDRESS=peer1.feb.pemilwa.com:14444
+      - CORE_METRICS_PROVIDER=prometheus
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer1feb"}
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+      #CouchDB
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1feb:5984
+      # The CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME and CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
+      # provide the credentials for ledger to connect to CouchDB.  The username and password must
+      # match the username and password set for the associated CouchDB.
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
+    working_dir: /root
+    command: peer node start
+    volumes:
+      - /home/ubuntu/network/fabric/organizations/peerOrganizations/feb.pemilwa.com/peers/peer1.feb.pemilwa.com:/etc/hyperledger/fabric
+      - peer1.feb.pemilwa.com:/var/hyperledger/production
+      - /home/ubuntu/network/fabric/config:/etc/hyperledger/peercfg
+      - ${DOCKER_SOCK}:/host/var/run/docker.sock
+    deploy:
+        mode: replicated
+        replicas: 1
+        restart_policy:
+          condition: on-failure
+        placement:
+          constraints:
+            - node.hostname == vm3
+    ports:
+      - 12051:12051
+      - 14444:14444
+    networks:
+      pemilwa:
+        aliases:
+          - peer1.feb.pemilwa.com

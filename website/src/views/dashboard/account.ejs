@@ -1,0 +1,82 @@
+<div class="wrapper">
+    <%- include('../components/dashboard_nav') %>
+        <section class="main">
+            <div class="container-fluid ps-4 pt-2">
+                <div class="d-flex" id="title">
+                    <h4> <i class="bi bi-person me-2"></i>Akun</h4>
+                </div>
+            </div>
+            <div class="container">
+                <div class="main-content">
+                    <div class="row">
+                        <div class="col-12 col-sm-7 col-md-6 m-auto">
+                            <div class="card border-0 shadow">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-center mb-3">
+                                        <h3><i class="bi bi-person-circle me-2"></i>Akun</h3>
+                                    </div>
+                                    <h5 style="font-weight: bold;">Informasi Pemilih</h5>
+                                    <div class="row">
+                                        <div class="col">
+                                            <h6>NIM:</h6>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-secondary">
+                                                <%= account.nim %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <h6>Nama:</h6>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-secondary">
+                                                <%= account.name %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <h6>Fakultas:</h6>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-secondary">
+                                                <%= account.faculty %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <h6>Status Memilih:</h6>
+                                        </div>
+                                        <div class="col">
+                                            <% if (!account.hasVoted) { %>
+                                            <p class="text-danger">
+                                                Belum Memilih
+                                            </p>
+                                            <% } else { %>
+                                                <p class="text-success">
+                                                    Sudah Memilih
+                                                </p>
+                                                <% }%>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <h6>Waktu Memilih:</h6>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-secondary">
+                                                <%= account.voteTime %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+</div>

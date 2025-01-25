@@ -1,0 +1,63 @@
+version: '3.7'
+
+networks:
+  pemilwa:
+    external: true
+    name: fabric-pemilwa
+
+services:
+  couchdb0filkom:
+    image: couchdb:3.3.3
+    labels:
+      service: hyperledger-fabric
+    # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
+    # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
+    hostname: couchdb0filkom
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=adminpw
+    # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
+    # for example map it to utilize Fauxton User Interface in dev environments.
+    deploy:
+        mode: replicated
+        replicas: 1
+        restart_policy:
+          condition: on-failure
+        placement:
+          constraints:
+            - node.hostname == vm1
+    ports:
+      - "5984:5984"
+    networks:
+      pemilwa:
+        aliases:
+          - couchdb0filkom
+
+
+  couchdb1filkom:
+    image: couchdb:3.3.3
+    labels:
+      service: hyperledger-fabric
+    # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
+    # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
+    hostname: couchdb1filkom
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=adminpw
+    # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
+    # for example map it to utilize Fauxton User Interface in dev environments.
+    deploy:
+        mode: replicated
+        replicas: 1
+        restart_policy:
+          condition: on-failure
+        placement:
+          constraints:
+            - node.hostname == vm1
+    ports:
+      - "8984:5984"
+    networks:
+      pemilwa:
+        aliases:
+          - couchdb1filkom
+

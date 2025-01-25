@@ -1,0 +1,56 @@
+<%- include('../components/alert') %>
+<div class="wrapper">
+  <%- include('../components/admin_nav') %>
+  <section class="main">
+    <div class="container-fluid ps-4 pt-2">
+      <div class="d-flex" id="title">
+        <h4><i class="bi bi-envelope-check me-2"></i>Cek Integritas Suara</h4>
+      </div>
+    </div>
+    <div class="container-fluid ps-4 pe-4">
+      <div id="data" class="my-4 px-4 py-2" style="background-color: #ffffff; border: 1px groove">
+        <form action="/admin/integrity" method="get">
+          <div class="mb-3">
+            <label for="inputVoteID" class="form-label" style="font-weight: 600;">Masukkan Id Suara:</label>
+            <input type="text" class="form-control" id="inputVoteID" aria-describedby="inputVoteID" name="voteID">
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary mb-3">Cek Integritas</button>
+          </div>
+
+        </form>
+        <h6 class="my-3" style="font-weight: 600">Id Suara: <span style="font-weight: 400;"><%= result.voteID %></span></h6>
+        <h6 class="mb-3" style="font-weight: 600">Nilai Hash Database: <span style="font-weight: 400;"><%= result.voteHashDb %></span></h6>
+        <h6 class="mb-3" style="font-weight: 600">Nilai Hash Ledger: <span style="font-weight: 400;"><%= result.voteHashLedger %></span></h6>
+        <h6 style="font-weight: 600">Riwayat Ledger:</h6>
+        <table class="table table-bordered">
+          <thead class="text-center">
+            <tr>
+              <th scope="col" style="width: 25%;">TxId</th>
+              <th scope="col" style="width: 15%;">Timestamp</th>
+              <th scope="col" style="width: 60%;">Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (result.historyVotes && result.historyVotes.length > 0) { %>
+            <% result.historyVotes.forEach(historyVote=> { %>
+            <tr>
+              <td><%= historyVote.TxId %></td>
+              <td>
+                <div style="font-weight: 600;">seconds: </div><%= historyVote.Timestamp.seconds %><br>
+                <div style="font-weight: 600;">nanos: </div><%= historyVote.Timestamp.nanos %>
+              </td>
+              <td>
+                <div style="font-weight: 600;">CreatedTime: </div><%= historyVote.Value.CreatedTime %><br>
+                <div style="font-weight: 600;">VoteHash: </div><%= historyVote.Value.VoteHash %><br>
+                <div style="font-weight: 600;">VoteID: </div><%= historyVote.Value.VoteID %>
+              </td>
+            </tr>
+            <% }) %>
+            <% }  %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>

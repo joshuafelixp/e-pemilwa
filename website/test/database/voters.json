@@ -1,0 +1,82 @@
+[
+    {
+        "nim": "195150200111040",
+        "name": "Ananda Judo",
+        "faculty": "FEB",
+        "password": "$2a$10$1qZLVz2yUAidY79ashKsue7aR732yVkQPWa3rhI9M0qVZyN9uHZFW",
+        "hasVoted": false,
+        "voteTime": null
+    },
+    {
+        "nim": "195150200111041",
+        "name": "Anthony Aaron",
+        "faculty": "FILKOM",
+        "password": "$2a$10$1qZLVz2yUAidY79ashKsue7aR732yVkQPWa3rhI9M0qVZyN9uHZFW",
+        "hasVoted": false,
+        "voteTime": null
+    },
+    {
+        "nim": "195150200111042",
+        "name": "Eurico Krisna",
+        "faculty": "FILKOM",
+        "password": "$2a$10$1qZLVz2yUAidY79ashKsue7aR732yVkQPWa3rhI9M0qVZyN9uHZFW",
+        "hasVoted": false,
+        "voteTime": null
+    },
+    {
+        "nim": "195150200111043",
+        "name": "Delta Revanza",
+        "faculty": "FILKOM",
+        "password": "$2a$10$1qZLVz2yUAidY79ashKsue7aR732yVkQPWa3rhI9M0qVZyN9uHZFW",
+        "hasVoted": false,
+        "voteTime": null
+    },
+    {
+        "nim": "195150200111044",
+        "name": "Restra Arya",
+        "faculty": "FILKOM",
+        "password": "$2a$10$1qZLVz2yUAidY79ashKsue7aR732yVkQPWa3rhI9M0qVZyN9uHZFW",
+        "hasVoted": false,
+        "voteTime": null
+    },
+    {
+        "nim": "195150200111045",
+        "name": "Aldo Syaherul",
+        "faculty": "FEB",
+        "password": "$2a$10$1qZLVz2yUAidY79ashKsue7aR732yVkQPWa3rhI9M0qVZyN9uHZFW",
+        "hasVoted": false,
+        "voteTime": null
+    },
+    {
+        "nim": "195150200111046",
+        "name": "Joshua Felix Potalangi",
+        "faculty": "FILKOM",
+        "password": "$2a$10$1qZLVz2yUAidY79ashKsue7aR732yVkQPWa3rhI9M0qVZyN9uHZFW",
+        "hasVoted": false,
+        "voteTime": null
+    },
+    {
+        "nim": "195150200111047",
+        "name": "Risandy Hartantio",
+        "faculty": "FEB",
+        "password": "$2a$10$1qZLVz2yUAidY79ashKsue7aR732yVkQPWa3rhI9M0qVZyN9uHZFW",
+        "hasVoted": false,
+        "voteTime": null
+    },
+    {
+        "nim": "195150200111048",
+        "name": "Muhammad Halim",
+        "faculty": "FH",
+        "password": "$2a$10$1qZLVz2yUAidY79ashKsue7aR732yVkQPWa3rhI9M0qVZyN9uHZFW",
+        "hasVoted": false,
+        "voteTime": null
+    },
+    {
+        "nim": "195150200111049",
+        "name": "Naufal Mubarak",
+        "faculty": "FH",
+        "password": "$2a$10$1qZLVz2yUAidY79ashKsue7aR732yVkQPWa3rhI9M0qVZyN9uHZFW",
+        "hasVoted": false,
+        "voteTime": null
+    }
+]

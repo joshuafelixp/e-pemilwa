@@ -1,0 +1,36 @@
+<div class="wrapper">
+  <%- include('../components/admin_nav') %>
+  <section class="main">
+    <div class="container-fluid ps-4 pt-2">
+      <div class="d-flex" id="title">
+        <h4><i class="bi bi-grid-1x2 me-2"></i>Kelola Admin</h4>
+      </div>
+    </div>
+    <div class="container-fluid ps-4 pe-4">
+      <div id="data" class="mt-4 px-2 py-2" style="background-color: #FFFFFF; border: 1px groove;">
+        <h5>Data Admin</h5>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">No</th>
+              <th scope="col">Username</th>
+              <th scope="col">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Admin1</td>
+              <td>
+                <button type="button" class="btn btn-primary">Ubah</button>
+                <button type="button" class="btn btn-danger">Hapus</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <a href="/admin/admin/add"><button type="button" class="btn btn-primary">Tambah</button></a>
+      </div>
+    </div>
+  </section>
+</div>

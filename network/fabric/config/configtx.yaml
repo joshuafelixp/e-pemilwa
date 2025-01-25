@@ -1,0 +1,204 @@
+Organizations:
+  - &filkom-orderer
+    Name: filkom-orderer
+    ID: filkom-ordererMSP
+    MSPDir: /home/ubuntu/network/fabric/organizations/ordererOrganizations/filkom-orderer.pemilwa.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('filkom-ordererMSP.member')"
+      Writers:
+        Type: Signature
+        Rule: "OR('filkom-ordererMSP.member')"
+      Admins:
+        Type: Signature
+        Rule: "OR('filkom-ordererMSP.admin')"
+    OrdererEndpoints:
+      - orderer0.filkom-orderer.pemilwa.com:7050
+    
+  - &fh-orderer
+    Name: fh-orderer
+    ID: fh-ordererMSP
+    MSPDir: /home/ubuntu/network/fabric/organizations/ordererOrganizations/fh-orderer.pemilwa.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('fh-ordererMSP.member')"
+      Writers:
+        Type: Signature
+        Rule: "OR('fh-ordererMSP.member')"
+      Admins:
+        Type: Signature
+        Rule: "OR('fh-ordererMSP.admin')"
+    OrdererEndpoints:
+      - orderer0.fh-orderer.pemilwa.com:8050
+
+  - &feb-orderer
+    Name: feb-orderer
+    ID: feb-ordererMSP
+    MSPDir: /home/ubuntu/network/fabric/organizations/ordererOrganizations/feb-orderer.pemilwa.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('feb-ordererMSP.member')"
+      Writers:
+        Type: Signature
+        Rule: "OR('feb-ordererMSP.member')"
+      Admins:
+        Type: Signature
+        Rule: "OR('feb-ordererMSP.admin')"
+    OrdererEndpoints:
+      - orderer0.feb-orderer.pemilwa.com:9050
+
+  - &filkom
+    Name: filkomMSP
+    ID: filkomMSP
+    MSPDir: /home/ubuntu/network/fabric/organizations/peerOrganizations/filkom.pemilwa.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('filkomMSP.admin', 'filkomMSP.peer', 'filkomMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('filkomMSP.admin', 'filkomMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('filkomMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('filkomMSP.peer')"
+
+  - &fh
+    Name: fhMSP
+    ID: fhMSP
+    MSPDir: /home/ubuntu/network/fabric/organizations/peerOrganizations/fh.pemilwa.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('fhMSP.admin', 'fhMSP.peer', 'fhMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('fhMSP.admin', 'fhMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('fhMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('fhMSP.peer')"
+
+  - &feb
+    Name: febMSP
+    ID: febMSP
+    MSPDir: /home/ubuntu/network/fabric/organizations/peerOrganizations/feb.pemilwa.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('febMSP.admin', 'febMSP.peer', 'febMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('febMSP.admin', 'febMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('febMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('febMSP.peer')"
+
+Capabilities:
+  Channel: &ChannelCapabilities
+    V2_0: true
+  Orderer: &OrdererCapabilities
+    V2_0: true
+  Application: &ApplicationCapabilities
+    V2_5: true
+
+Application: &ApplicationDefaults
+  Organizations:
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+    LifecycleEndorsement:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Endorsement"
+    Endorsement:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Endorsement"
+  Capabilities:
+    <<: *ApplicationCapabilities
+
+Orderer: &OrdererDefaults
+  Addresses:
+    - orderer0.filkom-orderer.pemilwa.com:7050
+  BatchTimeout: 2s
+  BatchSize:
+    MaxMessageCount: 10
+    AbsoluteMaxBytes: 99 MB
+    PreferredMaxBytes: 512 KB
+  Organizations:
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+    BlockValidation:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+
+Channel: &ChannelDefaults
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+  Capabilities:
+    <<: *ChannelCapabilities
+
+Profiles:
+  ChannelUsingRaft:
+    <<: *ChannelDefaults
+    Orderer:
+      <<: *OrdererDefaults
+      OrdererType: etcdraft
+      EtcdRaft:
+        Consenters:
+          - Host: orderer0.filkom-orderer.pemilwa.com
+            Port: 7050
+            ClientTLSCert: /home/ubuntu/network/fabric/organizations/ordererOrganizations/filkom-orderer.pemilwa.com/orderers/orderer0.filkom-orderer.pemilwa.com/tls/server.crt
+            ServerTLSCert: /home/ubuntu/network/fabric/organizations/ordererOrganizations/filkom-orderer.pemilwa.com/orderers/orderer0.filkom-orderer.pemilwa.com/tls/server.crt
+          - Host: orderer0.fh-orderer.pemilwa.com
+            Port: 8050
+            ClientTLSCert: /home/ubuntu/network/fabric/organizations/ordererOrganizations/fh-orderer.pemilwa.com/orderers/orderer0.fh-orderer.pemilwa.com/tls/server.crt
+            ServerTLSCert: /home/ubuntu/network/fabric/organizations/ordererOrganizations/fh-orderer.pemilwa.com/orderers/orderer0.fh-orderer.pemilwa.com/tls/server.crt
+          - Host: orderer0.feb-orderer.pemilwa.com
+            Port: 9050
+            ClientTLSCert: /home/ubuntu/network/fabric/organizations/ordererOrganizations/feb-orderer.pemilwa.com/orderers/orderer0.feb-orderer.pemilwa.com/tls/server.crt
+            ServerTLSCert: /home/ubuntu/network/fabric/organizations/ordererOrganizations/feb-orderer.pemilwa.com/orderers/orderer0.feb-orderer.pemilwa.com/tls/server.crt
+      Organizations:
+        - *filkom-orderer
+        - *fh-orderer
+        - *feb-orderer
+      Capabilities: *OrdererCapabilities
+    Application:
+      <<: *ApplicationDefaults
+      Organizations:
+        - *filkom
+        - *fh
+        - *feb
+      Capabilities: *ApplicationCapabilities

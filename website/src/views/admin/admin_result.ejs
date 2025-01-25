@@ -1,0 +1,112 @@
+<%- include('../components/alert') %>
+
+<div class="wrapper">
+  <%- include('../components/admin_nav') %>
+  <section class="main">
+    <div class="container-fluid ps-4 pe-4 pt-2">
+      <div class="d-flex" id="title">
+        <h4><i class="bi bi-clipboard-data me-2"></i>Laporan Hasil</h4>
+      </div>
+    </div>
+    <div class="container-fluid ps-4 pe-4 text-center">
+      <form action="/admin/result" method="POST">
+        <button type="submit" class="btn btn-primary">Rekap Suara</button>
+      </form>
+      <h6 class="mt-3">Waktu terakhir rekap suara:
+        <% if (result.recapTime.lastRecapTime) { %>
+        <span class="text-success"><%= result.recapTime.lastRecapTime %></span>
+        <% } else { %>
+        <span class="text-danger">Belum rekap suara!</span>
+        <%} %>
+      </h6>
+    </div>
+    <div class="container-fluid ps-4 pe-4">
+      <div id="data" class="mt-4 px-4 py-2" style="background-color: #ffffff; border: 1px groove">
+        <h5 style="font-weight: 600">Hasil Suara Final</h5>
+        <table class="table table-bordered text-center">
+          <thead>
+            <tr>
+              <th scope="col">Nomor Kandidat</th>
+              <th scope="col">Nama Kandidat</th>
+              <th scope="col">Perolehan Suara Valid</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (result.candidatesData && result.candidatesData.length > 0) { %>
+            <% let total = 0 %>
+            <% result.candidatesData.forEach(candidate=> { %>
+            <tr>
+              <td><%= candidate.candidateNumber %></td>
+              <td><%= candidate.presidentName %> & <%= candidate.vpresidentName %></td>
+              <td><%= candidate.totalVotes%></td>
+            </tr>
+            <% total+= candidate.totalVotes %>
+            <% }) %>
+            <tr>
+              <td></td>
+              <td></td>
+              <td style="font-weight: 600;">Total Suara: <%= total %></td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="container-fluid ps-4 pe-4">
+      <div id="data" class="mt-4 px-4 py-2" style="background-color: #ffffff; border: 1px groove">
+        <h5 style="font-weight: 600">Rincian Suara</h5>
+        <table class="table table-bordered text-center">
+          <tbody>
+            <tr>
+              <th scope="row" style="width: 60%;">Jumlah Suara Database</th>
+              <td style="width: 40%;"><%= result.voteCountDb %></td>
+            </tr>
+            <tr>
+              <th scope="row" style="width: 60%;">Jumlah Suara Ledger</th>
+              <td style="width: 40%;"><%= result.voteCountLedger %></td>
+            </tr>
+            <tr>
+              <th scope="row" style="width: 60%;">Jumlah Suara Valid</th>
+              <td style="width: 40%;"><%= result.voteCountValid %></td>
+            </tr>
+            <tr>
+              <th scope="row" style="width: 60%;">Jumlah Suara Tidak Valid</th>
+              <td style="width: 40%;"><%= result.voteCountInvalid %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="container-fluid ps-4 pe-4 mb-4">
+      <div id="data" class="mt-4 px-4 py-2" style="background-color: #ffffff; border: 1px groove">
+        <h5 style="font-weight: 600">List Suara Tidak Valid</h5>
+        <div class="table-responsive">
+          <table class="table table-bordered text-center">
+            <thead>
+              <tr>
+                <th scope="col" style="width: 50%;">ID Suara</th>
+                <th scope="col" style="width: 50%;">Cek Integritas Suara</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (result.invalidVotes && result.invalidVotes.length > 0) { %>
+              <% result.invalidVotes.forEach(invalidVote=> { %>
+              <tr>
+                <td><%= invalidVote.voteID %></td>
+                <td>
+                  <form action="/admin/integrity" method="get">
+                    <button type="submit" class="btn btn-primary" name="voteID" value="<%= invalidVote.voteID %>">Cek Integritas</button>
+                  </form>
+                </td>
+              </tr>
+              <% }) %>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
